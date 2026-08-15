@@ -30,19 +30,27 @@ ESP32-S3.
 Only one gear button is active at any time. When changing gears, the firmware
 releases the previous gear button before pressing the new one.
 
+## Bill of Materials
+
+- ESP32-S3 development board
+- DB9 male connector
+- 6 Dupont wires
+- Enclosure
+- USB-C cable
+
 ## Wiring
 
 The Logitech shifter uses a DE-9 connector. This project uses only the analog
 X/Y axes, power, ground, chip select tied high, and the reverse data signal.
 
-| Logitech DE-9 pin | Logitech signal | ESP32-S3 connection |
-| --- | --- | --- |
-| Pin 2 | Reverse data | GPIO4 |
-| Pin 3 | CS | 3.3V |
-| Pin 4 | X axis | GPIO1 |
-| Pin 6 | GND | GND |
-| Pin 8 | Y axis | GPIO2 |
-| Pin 9 | Power | 3.3V |
+| Logitech DE-9 pin | DB9 male pin | Logitech signal | ESP32-S3 connection |
+| --- | --- | --- | --- |
+| Pin 2 | Male pin 2 | Reverse data | GPIO4 |
+| Pin 3 | Male pin 3 | CS | 3.3V |
+| Pin 4 | Male pin 4 | X axis | GPIO1 |
+| Pin 6 | Male pin 6 | GND | GND |
+| Pin 8 | Male pin 8 | Y axis | GPIO2 |
+| Pin 9 | Male pin 9 | Power | 3.3V |
 
 Pins 1, 5, and 7 are not connected.
 
