@@ -103,29 +103,148 @@ Reverse logic:
 
 This project uses PlatformIO with the Arduino framework.
 
+## Installation Tutorial
+
+You do not need Codex to install this firmware. The easiest way is Visual Studio
+Code with the PlatformIO extension.
+
+### 1. Install the Tools
+
+Install these on Windows:
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [PlatformIO IDE extension for VS Code](https://platformio.org/install/ide?install=vscode)
+- Git for Windows, if you want to clone the repository from the command line
+
+The ESP32-S3 normally appears as an Espressif USB Serial/JTAG device. Windows 10
+and Windows 11 usually install the driver automatically. If your board does not
+show up as a COM port, install Espressif's USB/JTAG driver or use Espressif's
+driver tools for your specific board.
+
+### 2. Download the Project
+
+Clone this repository:
+
+```powershell
+git clone https://github.com/AndrewBoyHUN/AndrewBoys-Logitech-H-Shifter-ESP32-S3-USB-conversion.git
+cd AndrewBoys-Logitech-H-Shifter-ESP32-S3-USB-conversion
+```
+
+Or download the repository as a ZIP from GitHub and extract it.
+
+### 3. Open It in VS Code
+
+Open the extracted/cloned folder in VS Code. PlatformIO should detect
+`platformio.ini` automatically.
+
+If this is your first PlatformIO ESP32 project, the first build may take a while
+because PlatformIO downloads the ESP32 platform, Arduino framework, compiler, and
+upload tools.
+
+### 4. Connect the ESP32-S3
+
+Connect the ESP32-S3 to the PC with a USB data cable. Check Device Manager under
+"Ports (COM & LPT)" and note the COM port.
+
+In the tested build:
+
+- The bootloader/upload port was `COM31`.
+- After the USB HID firmware was running, the debug serial port was `COM32`.
+
+Your COM numbers will probably be different.
+
+### 5. Set the Upload Port
+
+Open `platformio.ini` and set `upload_port` to your ESP32-S3 upload COM port:
+
+```ini
+upload_port = COM31
+```
+
+If you want to use the serial debug monitor after flashing, set `monitor_port`
+to the COM port that appears after the firmware is running:
+
+```ini
+monitor_port = COM32
+```
+
+### 6. Build the Firmware
+
+In VS Code, click PlatformIO's "Build" button, or run:
+
 ```powershell
 pio run
+```
+
+The build should finish with `SUCCESS`.
+
+### 7. Upload the Firmware
+
+In VS Code, click PlatformIO's "Upload" button, or run:
+
+```powershell
 pio run -t upload
 ```
 
-The project was uploaded to the tested ESP32-S3 using:
+If upload works, the ESP32-S3 will reset and enumerate as a USB HID game
+controller.
+
+### 8. If Upload Does Not Start
+
+Some ESP32-S3 boards do not automatically enter bootloader mode. If upload fails
+with a connection error, try this:
+
+1. Hold the `BOOT` button on the ESP32-S3.
+2. Tap and release `RESET` while still holding `BOOT`.
+3. Release `BOOT`.
+4. Run `pio run -t upload` again.
+
+After a successful upload, press `RESET` once if the board stays in bootloader
+mode.
+
+### 9. Verify in Windows
+
+Open Windows "Set up USB game controllers" or run:
+
+```powershell
+joy.cpl
+```
+
+You should see a game controller/HID device. Depending on Windows' HID driver
+view, it may appear as `HID-compliant game controller`; the USB composite product
+string is `Logitech H-Shifter`.
+
+Move the shifter through the gears and verify:
+
+- 1st gear presses Button 1.
+- 2nd gear presses Button 2.
+- 3rd gear presses Button 3.
+- 4th gear presses Button 4.
+- 5th gear presses Button 5.
+- 6th gear presses Button 6.
+- Reverse presses Button 7.
+- Neutral releases all buttons.
+
+### 10. Optional Serial Debug Monitor
+
+The firmware prints debug lines when the detected gear changes:
+
+```text
+X=0957 Y=3918 REV=0 GEAR=1
+X=2056 Y=1976 REV=0 GEAR=N
+X=2876 Y=0293 REV=1 GEAR=R
+```
+
+Tested ports on the development machine:
 
 - Upload port: `COM31`
 - Debug/Serial Monitor port after HID firmware upload: `COM32`
 - Serial speed: `115200`
 
-To open the debug monitor:
+Open the serial monitor at 115200 baud:
 
 ```powershell
 pio device monitor --port COM32 --baud 115200
-```
-
-The firmware prints a debug line when the debounced detected gear changes:
-
-```text
-X=2056 Y=1976 REV=0 GEAR=N
-X=0957 Y=3918 REV=0 GEAR=1
-X=2876 Y=0293 REV=1 GEAR=R
 ```
 
 ## Windows Verification
