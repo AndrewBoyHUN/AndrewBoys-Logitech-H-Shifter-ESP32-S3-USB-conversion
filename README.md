@@ -146,26 +146,26 @@ upload tools.
 Connect the ESP32-S3 to the PC with a USB data cable. Check Device Manager under
 "Ports (COM & LPT)" and note the COM port.
 
-In the tested build:
+Use the COM port that belongs to your own ESP32-S3 board. On Windows it will
+look like `COM3`, `COM7`, `COM12`, etc. In the commands below this is written as
+`COMxx`; replace it with your actual port number.
 
-- The bootloader/upload port was `COM31`.
-- After the USB HID firmware was running, the debug serial port was `COM32`.
-
-Your COM numbers will probably be different.
+The port can change after flashing because the final firmware exposes native USB
+HID plus a USB CDC debug interface.
 
 ### 5. Set the Upload Port
 
 Open `platformio.ini` and set `upload_port` to your ESP32-S3 upload COM port:
 
 ```ini
-upload_port = COM31
+upload_port = COMxx
 ```
 
 If you want to use the serial debug monitor after flashing, set `monitor_port`
 to the COM port that appears after the firmware is running:
 
 ```ini
-monitor_port = COM32
+monitor_port = COMxx
 ```
 
 ### 6. Build the Firmware
@@ -235,16 +235,13 @@ X=2056 Y=1976 REV=0 GEAR=N
 X=2876 Y=0293 REV=1 GEAR=R
 ```
 
-Tested ports on the development machine:
-
-- Upload port: `COM31`
-- Debug/Serial Monitor port after HID firmware upload: `COM32`
-- Serial speed: `115200`
+Replace `COMxx` with the USB CDC debug COM port that appears for your own
+ESP32-S3 after flashing. Serial speed is `115200`.
 
 Open the serial monitor at 115200 baud:
 
 ```powershell
-pio device monitor --port COM32 --baud 115200
+pio device monitor --port COMxx --baud 115200
 ```
 
 ## Windows Verification
@@ -253,7 +250,7 @@ After upload, Windows detected the device as:
 
 - `HID-compliant game controller`
 - USB composite bus-reported product name: `Logitech H-Shifter`
-- Native USB CDC debug interface: `USB Serial Device (COM32)`
+- Native USB CDC debug interface: `USB Serial Device (COMxx)`
 
 No vJoy, background PC software, or game-specific configuration is required by
 the firmware itself.
